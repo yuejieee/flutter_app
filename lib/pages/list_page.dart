@@ -1,28 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
+import 'layout_test_page.dart';
 
 // 有状态的widget
 class HomeStateWidget extends StatefulWidget {
   @override
   // 创建state
-  createState() => new HomeStateWidgetState(); // 但行函数写法
+  createState() => HomeStateWidgetState(); // 但行函数写法
 }
 
 class HomeStateWidgetState extends State<HomeStateWidget> {
 
   final _suggestions = List<WordPair>();
   final _saved = Set<WordPair>();
-  final _biggerFont = const TextStyle(fontSize: 18);
+  final _biggerFont = TextStyle(fontSize: 18);
 
   @override
   // 初始化方法
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text('列表'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('列表'),
         actions: <Widget>[
-          new IconButton(
-              icon: new Icon(Icons.collections_bookmark), onPressed: _pushSaved),
+          IconButton(
+              icon: Icon(Icons.collections_bookmark), onPressed: _pushSaved),
+          IconButton(icon: Icon(Icons.adb), onPressed: _pushLayoutTest),
         ],
       ),
       body: _buildSuggestions(),
@@ -32,9 +34,9 @@ class HomeStateWidgetState extends State<HomeStateWidget> {
   // listView创建
   Widget _buildSuggestions() {
     return ListView.builder(
-        padding: const EdgeInsets.only(left: 16, top: 10, right: 16, bottom: 10),
+        padding: EdgeInsets.only(left: 16, top: 10, right: 16, bottom: 10),
         itemBuilder: (context, i) {
-          if (i.isOdd) return new Divider();
+          if (i.isOdd) return Divider();
           final index = i ~/ 2;
           if (index >= _suggestions.length) {
             _suggestions.addAll(generateWordPairs().take(10));
@@ -47,13 +49,13 @@ class HomeStateWidgetState extends State<HomeStateWidget> {
   // listViewRow创建
   Widget _buildRow(WordPair pair) {
     final _hasSaved = _saved.contains(pair);
-    return new ListTile(
-      contentPadding: const EdgeInsets.only(left: 8, right: 8),
-      title: new Text(
+    return ListTile(
+      contentPadding: EdgeInsets.only(left: 8, right: 8),
+      title: Text(
         pair.asPascalCase,
         style: _biggerFont,
       ),
-      trailing: new Icon(
+      trailing: Icon(
         _hasSaved ? Icons.favorite : Icons.favorite_border,
         color: _hasSaved ? Colors.red : null,
       ),
@@ -69,15 +71,15 @@ class HomeStateWidgetState extends State<HomeStateWidget> {
     );
   }
 
-  // 页面跳转
+  // 收藏页面跳转
   void _pushSaved() {
     Navigator.of(context).push(
-      new MaterialPageRoute(
+        MaterialPageRoute(
           builder: (context) {
             final tiles = _saved.map(
                   (pair) {
-                return new ListTile(
-                  title: new Text(
+                return ListTile(
+                  title: Text(
                     pair.asPascalCase,
                     style: _biggerFont,
                   ),
@@ -90,14 +92,25 @@ class HomeStateWidgetState extends State<HomeStateWidget> {
                 tiles: tiles,
             ).toList();
 
-            return new Scaffold(
-              appBar: new AppBar(
-                title: new Text('收藏夹'),
+            return Scaffold(
+              appBar: AppBar(
+                title: Text('收藏夹'),
               ),
-              body: new ListView(children: divied),
+              body: ListView(children: divied),
             );
-          },
+            },
       )
+    );
+  }
+
+  // 布局test页面跳转
+  void _pushLayoutTest() {
+    Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) {
+            return TestLayoutWidget();
+            },
+        )
     );
   }
 }

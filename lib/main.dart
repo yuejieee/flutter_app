@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
-import 'list.dart';
+import 'package:test_flutter/pages/list_page.dart';
+//import 'package:flutter/rendering.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  // UI可视化调试
+//  debugPaintSizeEnabled = true;
+
+  runApp(MyApp());
+}
 
 // 无状态widget
 class MyApp extends StatelessWidget {
