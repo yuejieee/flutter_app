@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DetailWidget extends StatefulWidget {
@@ -11,11 +12,12 @@ class DetailWidgetState extends State<DetailWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('详情'),
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        actionsForegroundColor: Colors.black,
+        middle: Text('详情', style: TextStyle(fontSize: 19)),
       ),
-      body: ListView(
+      child: ListView(
         children: <Widget>[
           _getMainView(),
         ],
@@ -27,9 +29,10 @@ class DetailWidgetState extends State<DetailWidget> {
     return Column(
       children: <Widget>[
         Container(
+          width: MediaQuery.of(context).size.width,
           child: Image.network(
-            'https://via.placeholder.com/414x200',
-            fit: BoxFit.fill,
+            'https://via.placeholder.com/375x200',
+            fit: BoxFit.cover,
           ),
         ),
         _getOutlineSection(),

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:test_flutter/views/loan_list_item.dart';
 
@@ -10,15 +11,13 @@ class ListLayoutState extends State<TestLayoutWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CupertinoPageScaffold(
       backgroundColor: Colors.grey[200],
-      appBar: AppBar(
-        title: Text(
-          '布局',
-          textAlign: TextAlign.left,
-        ),
+      navigationBar: CupertinoNavigationBar(
+        middle: Text('布局', style: TextStyle(fontSize: 19)),
+        backgroundColor: Colors.white,
       ),
-      body: _getListView(),
+      child: _getListView(),
     );
   }
 

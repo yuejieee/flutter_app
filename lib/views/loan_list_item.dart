@@ -37,6 +37,7 @@ class LoanListItemWidgetState extends State<LoanListItemWidget> {
         print('点击第$index行');
         _pushToDetail();
       },
+
       child: Card(
         margin: EdgeInsets.only(top: 10, left: 10, right: 10),
         color: Colors.white,

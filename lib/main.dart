@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:test_flutter/pages/list_page.dart';
+import 'package:flutter/cupertino.dart';
+import 'pages/layout_test_page.dart';
 //import 'package:flutter/rendering.dart';
 
 void main() {
@@ -14,9 +14,12 @@ class MyApp extends StatelessWidget {
   @override
   // 重写默认构造方法
   Widget build(BuildContext context) {
-    return new MaterialApp (
+    return new CupertinoApp(
+      theme: CupertinoThemeData(
+        scaffoldBackgroundColor: CupertinoColors.white,
+      ),
       title: 'flutter_app',
-      home: HomeStateWidget()
+      home: TestLayoutWidget(),
     );
   }
 }
