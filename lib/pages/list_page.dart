@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
-import 'layout_test_page.dart';
 
 // 有状态的widget
-class HomeStateWidget extends StatefulWidget {
+class ListPageStateWidget extends StatefulWidget {
   @override
   // 创建state
-  createState() => HomeStateWidgetState(); // 但行函数写法
+  createState() => ListPageStateWidgetState(); // 但行函数写法
 }
 
-class HomeStateWidgetState extends State<HomeStateWidget> {
-
+class ListPageStateWidgetState extends State<ListPageStateWidget> {
   final _suggestions = List<WordPair>();
   final _saved = Set<WordPair>();
   final _biggerFont = TextStyle(fontSize: 18);
@@ -20,11 +18,21 @@ class HomeStateWidgetState extends State<HomeStateWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('列表'),
+        title: Text(
+          '列表',
+          style: TextStyle(color: Colors.black),
+        ),
+        brightness: Brightness.light,
+        backgroundColor: Colors.white,
+        actionsIconTheme: IconThemeData(
+          color: Colors.black,
+        ),
+        iconTheme: IconThemeData(
+          color: Colors.black,
+        ),
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.collections_bookmark), onPressed: _pushSaved),
-          IconButton(icon: Icon(Icons.adb), onPressed: _pushLayoutTest),
         ],
       ),
       body: _buildSuggestions(),
@@ -42,8 +50,7 @@ class HomeStateWidgetState extends State<HomeStateWidget> {
             _suggestions.addAll(generateWordPairs().take(10));
           }
           return _buildRow(_suggestions[index]);
-        }
-    );
+        });
   }
 
   // listViewRow创建
@@ -73,44 +80,32 @@ class HomeStateWidgetState extends State<HomeStateWidget> {
 
   // 收藏页面跳转
   void _pushSaved() {
-    Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) {
-            final tiles = _saved.map(
-                  (pair) {
-                return ListTile(
-                  title: Text(
-                    pair.asPascalCase,
-                    style: _biggerFont,
-                  ),
-                );
-              },
-            );
-
-            final divied = ListTile.divideTiles(
-                context: context,
-                tiles: tiles,
-            ).toList();
-
-            return Scaffold(
-              appBar: AppBar(
-                title: Text('收藏夹'),
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) {
+        final tiles = _saved.map(
+          (pair) {
+            return ListTile(
+              title: Text(
+                pair.asPascalCase,
+                style: _biggerFont,
               ),
-              body: ListView(children: divied),
             );
-            },
-      )
-    );
+          },
+        );
+
+        final divied = ListTile.divideTiles(
+          context: context,
+          tiles: tiles,
+        ).toList();
+
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('收藏夹'),
+          ),
+          body: ListView(children: divied),
+        );
+      },
+    ));
   }
 
-  // 布局test页面跳转
-  void _pushLayoutTest() {
-    Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) {
-            return TestLayoutWidget();
-            },
-        )
-    );
-  }
 }

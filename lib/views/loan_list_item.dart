@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test_flutter/pages/detail_page.dart';
+import 'package:test_flutter/pages/custom_list_detail_page.dart';
 
 class LoanListItemWidget extends StatefulWidget {
   int index;
@@ -108,7 +108,7 @@ class LoanListItemWidgetState extends State<LoanListItemWidget> {
     Navigator.of(context).push(
       MaterialPageRoute(
           builder: (context) {
-            return DetailWidget();
+            return CustomListDetailWidget();
           }
       ),
     );

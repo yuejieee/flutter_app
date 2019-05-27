@@ -1,23 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class DetailWidget extends StatefulWidget {
+class CustomListDetailWidget extends StatefulWidget {
   @override
-  createState() => DetailWidgetState();
+  createState() => CustomListDetailWidgetState();
 }
 
-class DetailWidgetState extends State<DetailWidget> {
+class CustomListDetailWidgetState extends State<CustomListDetailWidget> {
   final String content =
       'Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese Alps. Situated 1,578 meters above sea level, it is one of the larger Alpine Lakes. A gondola ride from Kandersteg, followed by a half-hour walk through pastures and pine forest, leads you to the lake, which warms to 20 degrees Celsius in the summer. Activities enjoyed here include rowing, and riding the summer toboggan run.';
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        actionsForegroundColor: Colors.black,
-        middle: Text('详情', style: TextStyle(fontSize: 19)),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        brightness: Brightness.light,
+        title: Text('详情', style: TextStyle(fontSize: 19)),
+        iconTheme: IconThemeData(color: Colors.black),
       ),
-      child: ListView(
+      body: ListView(
         children: <Widget>[
           _getMainView(),
         ],
@@ -84,7 +86,7 @@ class DetailWidgetState extends State<DetailWidget> {
 
   Widget _getActionSection() {
     return Padding(
-      padding: EdgeInsets.only(top: 30),
+      padding: EdgeInsets.only(top: 30, left: 30, right: 30),
       child: Row(
         children: <Widget>[
           _getActionItem(Icons.phone, 'CALL'),
@@ -97,21 +99,24 @@ class DetailWidgetState extends State<DetailWidget> {
 
   Widget _getActionItem(IconData icon, String text) {
     return Expanded(
-      child: Column(
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(bottom: 8.0),
-            child: Icon(icon, color: Colors.blue[300]),
-          ),
-          Text(
-            text,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.blue[300],
+      child: GestureDetector(
+        onTap: _pushToNextPage,
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(bottom: 8.0),
+              child: Icon(icon, color: Colors.blue[300]),
             ),
-          )
-        ],
+            Text(
+              text,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue[300],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -125,6 +130,16 @@ class DetailWidgetState extends State<DetailWidget> {
           fontSize: 16,
           fontWeight: FontWeight.w500,
         ),
+      ),
+    );
+  }
+
+  void _pushToNextPage() {
+    Navigator.of(context).push(
+      CupertinoPageRoute(
+        builder: (context) {
+          return null;
+        },
       ),
     );
   }
