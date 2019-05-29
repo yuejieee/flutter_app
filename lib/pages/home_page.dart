@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'list_page.dart';
 import 'custom_list_page.dart';
+import 'day_in_history_page.dart';
 
 class HomePageWidget extends StatefulWidget {
   @override
@@ -32,7 +33,7 @@ class HomePageWidgetState extends State<HomePageWidget> {
     );
   }
 
-  final titleList = ['列表', '自定义列表', '2', '3'];
+  final titleList = ['列表', '自定义列表', '历史上的今天', '3'];
 
   _getContentView() {
     return GridView.builder(
@@ -61,6 +62,8 @@ class HomePageWidgetState extends State<HomePageWidget> {
                 _pushToListPage();
               } else if (i == 1) {
                 _pushToLayoutTestPage();
+              } else if (i == 2) {
+                _pushToDayInHistoryPage();
               }
             },
           ),
@@ -83,6 +86,14 @@ class HomePageWidgetState extends State<HomePageWidget> {
     Navigator.of(context).push(
       CupertinoPageRoute(builder: (context) {
         return CustomListPageWidget();
+      }),
+    );
+  }
+
+  _pushToDayInHistoryPage() {
+    Navigator.of(context).push(
+      CupertinoPageRoute(builder: (context) {
+        return DayInHistoryWidget();
       }),
     );
   }

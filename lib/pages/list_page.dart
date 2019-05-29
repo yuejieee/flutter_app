@@ -9,8 +9,8 @@ class ListPageStateWidget extends StatefulWidget {
 }
 
 class ListPageStateWidgetState extends State<ListPageStateWidget> {
-  final _suggestions = List<WordPair>();
-  final _saved = Set<WordPair>();
+  final _suggestions = List();
+  final _saved = Set();
   final _biggerFont = TextStyle(fontSize: 18);
 
   @override
