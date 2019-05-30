@@ -13,9 +13,9 @@ class DayInHistoryWidget extends StatefulWidget {
 }
 
 class DayInHistoryWidgetState extends State<DayInHistoryWidget> {
-
-  DayInHisotryModel model;
+  DayInHistoryModel model;
   String date = '';
+  List<DayInHistoryItem> dataList = [];
 
   @override
   void initState() {
@@ -27,7 +27,10 @@ class DayInHistoryWidgetState extends State<DayInHistoryWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(date),
+        title: Text(
+          date,
+          style: TextStyle(color: Colors.black),
+        ),
         brightness: Brightness.light,
         backgroundColor: Colors.white,
         actionsIconTheme: IconThemeData(
@@ -42,20 +45,48 @@ class DayInHistoryWidgetState extends State<DayInHistoryWidget> {
   }
 
   _getContentWidget() {
-    return GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        mainAxisSpacing: 5,
-        crossAxisSpacing: 5,
+    return RefreshIndicator(
+      child: GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 5,
+          crossAxisSpacing: 5,
+        ),
+        itemBuilder: (context, i) {
+          return GridTile(
+            child: _getGridItem(i),
+          );
+        },
+        itemCount: dataList.length,
       ),
-      itemBuilder: (context, i) {
-        return GridTile(
-          child: Container(
-            color: randomColor(),
-            child: Center(),
-          ),
-        );
-      },
+      onRefresh: () => _loadData(),
+    );
+  }
+
+  _getGridItem(index) {
+    return Container(
+      color: randomColor(),
+      child: Padding(
+        padding: EdgeInsets.all(12),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Expanded(
+              child: Text(
+                dataList[index].year + '年',
+                style: TextStyle(color: Colors.white, fontSize: 22),
+              ),
+            ),
+            Expanded(
+              child: Text(
+                dataList[index].title,
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+              flex: 2,
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -65,12 +96,11 @@ class DayInHistoryWidgetState extends State<DayInHistoryWidget> {
     http.Response response = await http.get(requestUrl);
     setState(() {
       Map modelMap = json.decode(response.body);
-      model = DayInHisotryModel.from
-      print(model);
+      model = DayInHistoryModel.fromJson(modelMap);
+      date = model.today;
+      dataList = model.result;
     });
   }
-
-
 }
 
 Color randomColor() {

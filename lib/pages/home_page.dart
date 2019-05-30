@@ -48,12 +48,18 @@ class HomePageWidgetState extends State<HomePageWidget> {
             child: Container(
               color: Colors.blue[100],
               child: Center(
-                child: Text(
-                  '${titleList[i]}',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Image.asset('images/ic_place.png'),
+                    Text(
+                      '${titleList[i]}',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -77,7 +83,7 @@ class HomePageWidgetState extends State<HomePageWidget> {
   _pushToListPage() {
     Navigator.of(context).push(
       CupertinoPageRoute(builder: (context) {
-        return ListPageStateWidget();
+        return ListPageWidget();
       }),
     );
   }
@@ -97,5 +103,4 @@ class HomePageWidgetState extends State<HomePageWidget> {
       }),
     );
   }
-
 }

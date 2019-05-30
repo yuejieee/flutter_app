@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'pages/home_page.dart';
+import 'pages/tab_bar_page.dart';
 //import 'package:flutter/rendering.dart';
 
 void main() {
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         backgroundColor: Colors.white,
       ),
       title: 'flutter_app',
-      home: HomePageWidget(),
+      home: TabBarWidget(),
     );
   }
 }

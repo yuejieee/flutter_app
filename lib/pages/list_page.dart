@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
 
 // 有状态的widget
-class ListPageStateWidget extends StatefulWidget {
+class ListPageWidget extends StatefulWidget {
   @override
   // 创建state
-  createState() => ListPageStateWidgetState(); // 但行函数写法
+  createState() => ListPageWidgetState(); // 但行函数写法
 }
 
-class ListPageStateWidgetState extends State<ListPageStateWidget> {
+class ListPageWidgetState extends State<ListPageWidget> {
   final _suggestions = List();
   final _saved = Set();
   final _biggerFont = TextStyle(fontSize: 18);
