@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'home_page.dart';
-import 'list_page.dart';
+import 'package:flutter_app/home/home_page.dart';
+import 'package:flutter_app/message/message_page.dart';
+import 'package:flutter_app/mine/mine_page.dart';
 
 class TabBarWidget extends StatefulWidget {
   @override
@@ -18,8 +19,9 @@ class TabBarWidgetState extends State<TabBarWidget>
   void initState() {
     super.initState();
     _tabItems = [
-      BottomNavigationBarItem(title: Text('首页'), icon: Icon(Icons.account_balance)),
-      BottomNavigationBarItem(title: Text('列表'), icon: Icon(Icons.announcement)),
+      BottomNavigationBarItem(icon: Icon(Icons.home), label: "首页"),
+      BottomNavigationBarItem(icon: Icon(Icons.mail), label: "消息"),
+      BottomNavigationBarItem(icon: Icon(Icons.person), label: "我的")
     ];
     _tabController = TabController(vsync: this, length: _tabItems.length);
   }
@@ -36,9 +38,11 @@ class TabBarWidgetState extends State<TabBarWidget>
     return Scaffold(
       body: TabBarView(
         controller: _tabController,
+        physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
           HomePageWidget(),
-          ListPageWidget(),
+          MessagePageWidget(),
+          MinePageWidget()
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

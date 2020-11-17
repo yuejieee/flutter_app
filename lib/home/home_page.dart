@@ -1,9 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'list_page.dart';
-import 'custom_list_page.dart';
-import 'day_in_history_page.dart';
 
 class HomePageWidget extends StatefulWidget {
   @override
@@ -65,42 +60,17 @@ class HomePageWidgetState extends State<HomePageWidget> {
             ),
             onTap: () {
               if (i == 0) {
-                _pushToListPage();
+
               } else if (i == 1) {
-                _pushToLayoutTestPage();
+
               } else if (i == 2) {
-                _pushToDayInHistoryPage();
+
               }
             },
           ),
         );
       },
       itemCount: titleList.length,
-    );
-  }
-
-  // 列表页
-  _pushToListPage() {
-    Navigator.of(context).push(
-      CupertinoPageRoute(builder: (context) {
-        return ListPageWidget();
-      }),
-    );
-  }
-
-  _pushToLayoutTestPage() {
-    Navigator.of(context).push(
-      CupertinoPageRoute(builder: (context) {
-        return CustomListPageWidget();
-      }),
-    );
-  }
-
-  _pushToDayInHistoryPage() {
-    Navigator.of(context).push(
-      CupertinoPageRoute(builder: (context) {
-        return DayInHistoryWidget();
-      }),
     );
   }
 }

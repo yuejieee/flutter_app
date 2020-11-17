@@ -1,12 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'pages/tab_bar_page.dart';
-//import 'package:flutter/rendering.dart';
+import 'package:flutter_app/base/tab_bar_page.dart';
 
 void main() {
-  // UI可视化调试
-//  debugPaintSizeEnabled = true;
-
   runApp(MyApp());
 }
 
