@@ -34,9 +34,15 @@ class MinePageState extends State<MinePageWidget> {
   }
 
   _setupContentViews() {
-    return Text(
-      '我的',
-      textAlign: TextAlign.center,
+    return Center(
+      child: Text(
+        '我的',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+            color: Colors.blueAccent,
+            fontSize: 18,
+        ),
+      ),
     );
   }
 }

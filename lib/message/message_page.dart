@@ -30,9 +30,15 @@ class MessagePageState extends State<MessagePageWidget> {
   }
 
   _setupContentViews() {
-    return Text(
-      '消息',
-      textAlign: TextAlign.center,
+    return Center(
+      child: Text(
+        '消息',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Colors.black12,
+          fontSize: 18,
+        ),
+      ),
     );
   }
 }
