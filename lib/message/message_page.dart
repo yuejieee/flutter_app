@@ -37,7 +37,7 @@ class MessagePageState extends State<MessagePageWidget> {
     return FlatButton(
       child: Container(
         alignment: Alignment.center,
-        margin: EdgeInsets.all(15),
+        margin: EdgeInsets.only(top: 15, bottom: 10),
         height: 75,
         decoration: BoxDecoration(
           color: Colors.white,
