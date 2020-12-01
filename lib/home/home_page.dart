@@ -28,9 +28,39 @@ class HomePageWidgetState extends State<HomePageWidget> {
     );
   }
 
-  final titleList = ['列表', '自定义列表', '历史上的今天', '3'];
-
   _getContentView() {
-
+    return Column(
+      children: [
+        Container(
+          child: Image(
+            image: AssetImage('images/main_top.jpg'),
+          ),
+        ),
+        Expanded(
+          child: Container(
+            color: Color(0xFF46A4DE),
+          ),
+        ),
+        Container(
+          child: Stack(
+            children: [
+              Image(
+                image: AssetImage('images/main_bottom.jpg'),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 10, left: 10, bottom: 10),
+                child: SizedBox(
+                  width: 150,
+                  height: 150,
+                  child: Image(
+                    image: AssetImage('images/throw_pz.png'),
+                  ),
+                ),
+              )
+            ],
+          ),
+        )
+      ],
+    );
   }
 }
