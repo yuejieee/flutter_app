@@ -13,6 +13,17 @@ class MyApp extends StatelessWidget {
     return new MaterialApp(
       theme: ThemeData(
         backgroundColor: Colors.white,
+        brightness: Brightness.light,
+        appBarTheme: AppBarTheme(
+          brightness: Brightness.light,
+          color: Colors.white,
+          actionsIconTheme: IconThemeData(
+            color: Colors.black,
+          ),
+          iconTheme: IconThemeData(
+            color: Colors.black,
+          ),
+        ),
       ),
       title: 'flutter_app',
       home: TabBarWidget(),

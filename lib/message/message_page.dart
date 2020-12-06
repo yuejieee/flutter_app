@@ -19,14 +19,6 @@ class MessagePageState extends State<MessagePageWidget> {
           '消息',
           style: TextStyle(color: Colors.black),
         ),
-        brightness: Brightness.light,
-        backgroundColor: Colors.white,
-        actionsIconTheme: IconThemeData(
-          color: Colors.black,
-        ),
-        iconTheme: IconThemeData(
-          color: Colors.black,
-        ),
       ),
       body: _setupContentViews(),
     );

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'my_bottle_page.dart';
+import 'my_blackList_page.dart';
+import 'feedback_page.dart';
+import 'setting_page.dart';
 
 class MinePageWidget extends StatefulWidget {
   @override
@@ -26,14 +29,6 @@ class MinePageState extends State<MinePageWidget> {
           '我的',
           style: TextStyle(color: Colors.black),
         ),
-        brightness: Brightness.light,
-        backgroundColor: Colors.white,
-        actionsIconTheme: IconThemeData(
-          color: Colors.black,
-        ),
-        iconTheme: IconThemeData(
-          color: Colors.black,
-        ),
       ),
       body: _setupContentViews(),
     );
@@ -46,6 +41,7 @@ class MinePageState extends State<MinePageWidget> {
         SliverAppBar(
           expandedHeight: 200,
           flexibleSpace: _getAppBar(),
+          backgroundColor: Colors.lightBlue,
         ),
         SliverList(
           delegate: SliverChildBuilderDelegate(
@@ -69,6 +65,7 @@ class MinePageState extends State<MinePageWidget> {
                       ),
                     ),
                   ),
+                  shadowColor: Color(0xCD000000),
                 ),
               ),
             ),
@@ -141,19 +138,55 @@ class MinePageState extends State<MinePageWidget> {
     );
   }
 
+  // 跳转我的黑名单
+  _goToMyBlackListPage() {
+    Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (context) {
+          return MyBlackListPage();
+        },
+      ),
+    );
+  }
+
+  // 跳转意见反馈
+  _goToFeedbackPage() {
+    Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (context) {
+          return FeedbackPage();
+        },
+      ),
+    );
+  }
+
+  // 跳转设置
+  _goToSettingPage() {
+    Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (context) {
+          return SettingPage();
+        },
+      ),
+    );
+  }
+
   _didSelectedRow(int index) {
     switch (index) {
       case 0:
         _goToMyBottlePage();
         break;
       case 1:
-        print('222');
+        _goToMyBlackListPage();
         break;
       case 2:
-        print('333');
+        _goToFeedbackPage();
         break;
       case 3:
-        print('444');
+        _goToSettingPage();
         break;
     }
   }

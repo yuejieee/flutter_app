@@ -6,30 +6,52 @@ class HomePageWidget extends StatefulWidget {
 }
 
 class HomePageWidgetState extends State<HomePageWidget>
-    with SingleTickerProviderStateMixin {
-  Animation movement;
-  AnimationController controller;
+    with TickerProviderStateMixin {
+  Animation ballonMovement;
+  AnimationController ballonController;
+
+  Animation boatMovement;
+  AnimationController boatController;
 
   dispose() {
     //路由销毁时需要释放动画资源
-    controller.dispose();
+    ballonController.dispose();
+    boatController.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
-    controller = new AnimationController(
-        duration: const Duration(seconds: 30), vsync: this);
-    //图片宽高从0变到300
-    movement =
-        new Tween(begin: Alignment(-1.1, -0.85), end: Alignment(1.5, -0.85))
-            .animate(controller)
+    _getBallonAnimation();
+    _getBoatAnimation();
+  }
+
+  // 热气球动画
+  _getBallonAnimation() {
+    ballonController = new AnimationController(
+        duration: const Duration(seconds: 60), vsync: this);
+    ballonMovement =
+        new Tween(begin: Alignment(-1.3, -0.85), end: Alignment(1.3, -0.85))
+            .animate(ballonController)
               ..addListener(() {
                 setState(() => {});
               });
     //启动动画(正向执行)
-    controller.repeat();
+    ballonController.repeat();
+  }
+
+  _getBoatAnimation() {
+    boatController = new AnimationController(
+        duration: const Duration(seconds: 30), vsync: this);
+    boatMovement =
+    new Tween(begin: Alignment(-1.3, -0.2), end: Alignment(1.3, -0.2))
+        .animate(boatController)
+      ..addListener(() {
+        setState(() => {});
+      });
+    //启动动画(正向执行)
+    boatController.repeat();
   }
 
   @override
@@ -39,14 +61,6 @@ class HomePageWidgetState extends State<HomePageWidget>
         title: Text(
           '首页',
           style: TextStyle(color: Colors.black),
-        ),
-        brightness: Brightness.light,
-        backgroundColor: Colors.white,
-        actionsIconTheme: IconThemeData(
-          color: Colors.black,
-        ),
-        iconTheme: IconThemeData(
-          color: Colors.black,
         ),
       ),
       body: _getContentView(),
@@ -90,13 +104,21 @@ class HomePageWidgetState extends State<HomePageWidget>
           ),
         ),
         Align(
-          alignment: movement.value,
+          alignment: ballonMovement.value,
           child: Image(
             image: AssetImage('images/balloon (1).png'),
             width: 60,
             height: 60,
           ),
         ),
+        Align(
+          alignment: boatMovement.value,
+          child: Image(
+            image: AssetImage('images/boat.png'),
+            width: 70,
+            height: 70,
+          ),
+        )
       ],
     );
   }

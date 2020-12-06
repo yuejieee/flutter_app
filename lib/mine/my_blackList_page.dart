@@ -1,33 +1,36 @@
 import 'package:flutter/material.dart';
 
-class MyBottleWidget extends StatefulWidget {
+class MyBlackListPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return MyBottleWidgetState();
+    return MyBlackListPageState();
     throw UnimplementedError();
   }
 }
 
-class MyBottleWidgetState extends State<MyBottleWidget> {
-  final dataList = ['', '', ''];
+class MyBlackListPageState extends State<MyBlackListPage> {
+  var dataList = ['', '', ''];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '我的漂流瓶',
+          '黑名单',
           style: TextStyle(color: Colors.black),
         ),
       ),
-      body: _setupContentViews(),
+      body: _getContentView(),
     );
-    throw UnimplementedError();
   }
 
-  _setupContentViews() {
+  _getContentView() {
     return ListView.separated(
         itemCount: dataList.length,
         itemBuilder: (context, index) {
@@ -43,7 +46,7 @@ class MyBottleWidgetState extends State<MyBottleWidget> {
                     child: Image.network('http://fpoimg.com/210x210'),
                   ),
                 ),
-                Text('漂流瓶内容'),
+                Text('用户名'),
               ],
             ),
           );
