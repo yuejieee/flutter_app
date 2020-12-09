@@ -4,6 +4,7 @@ import 'my_bottle_page.dart';
 import 'my_blackList_page.dart';
 import 'feedback_page.dart';
 import 'setting_page.dart';
+import 'package:dio/dio.dart';
 
 class MinePageWidget extends StatefulWidget {
   @override
@@ -17,7 +18,7 @@ class MinePageWidget extends StatefulWidget {
 class MinePageState extends State<MinePageWidget> {
   final titleList = ['我的漂流瓶', '黑名单', '意见反馈', '设置'];
   final nickName = '用户名';
-  final avatarUrl = 'http://fpoimg.com/210x210';
+  final avatarUrl = 'https://fpoimg.com/210x210';
   final memberID = '683471';
 
   @override

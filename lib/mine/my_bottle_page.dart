@@ -40,7 +40,7 @@ class MyBottleWidgetState extends State<MyBottleWidget> {
                   padding: EdgeInsets.only(top: 10, left: 15, bottom: 10, right: 15),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(25),
-                    child: Image.network('http://fpoimg.com/210x210'),
+                    child: Image.network('https://fpoimg.com/210x210'),
                   ),
                 ),
                 Text('漂流瓶内容'),
