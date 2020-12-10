@@ -1,12 +1,10 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'base_model.dart';
+import 'package:encrypt/encrypt.dart';
 import 'package:xml2json/xml2json.dart';
 
-enum RequestMode {
-  get,
-  post
-}
+String staticKey = 'ABCDEFGHIJK12345';
 
 class Network {
   // 工厂模式
@@ -25,55 +23,39 @@ class Network {
   }
   // 单列模式
   static Network _getInstance() {
-    if (_instance == null){
+    if (_instance == null) {
       _instance = Network._internal();
     }
     return _instance;
   }
 
-  get(String url, Map<String,dynamic> params, {Function success, Function failure}){
-    _doRequest(url, params, RequestMode.get, success, failure);
+  post(String url, String port, String key, Map<String,dynamic> params, {Function success, Function failure}){
+    _doRequest(url, port, key, params, success, failure);
   }
 
-  post(String url, Map<String,dynamic> params, {Function success, Function failure}){
-    _doRequest(url, params, RequestMode.post, success, failure);
-  }
-
-  void _doRequest(String url, Map<String,dynamic> params, RequestMode method, Function successCallBack, Function failureCallBack) async{
-    try{
-      /// 可以添加header
-      //  dio.options.headers.addAll({'token':xxx});
+  void _doRequest(String url, String port, String key, Map<String,dynamic> params, Function successCallBack, Function failureCallBack) async{
+    try {
+      print(_encryptData(params, key));
       Response response;
-      switch (method){
-        case RequestMode.get:
-          if (params != null && params.isNotEmpty){
-            response = await dio.get(url,queryParameters: params);
-          } else {
-            response = await dio.get(url);
-          }
-          break;
-        case RequestMode.post:
-          if (params != null && params.isNotEmpty){
-            response = await dio.post(url,queryParameters: params);
-          } else {
-            response = await dio.post(url);
-          }
-          break;
+      if (params != null && params.isNotEmpty){
+        response = await dio.post(url, data: params);
+      } else {
+        response = await dio.post(url);
       }
       Map<String, dynamic> result = json.decode(response.toString());
       // 打印信息
       print('''api: $url\nparams: $params\nresult: $result''');
       // 转化为model
       BaseModel model = BaseModel.fromJson(result);
-      if (model.code == 200){ // 200 请求成功
+      if (model.result.isSuccess){ // 200 请求成功
         if (successCallBack != null){// 返回请求数据
           successCallBack(model.data);
         }
-      }else {
+      } else {
         //直接使用Toast弹出错误信息
         //返回失败信息
         if (failureCallBack != null){
-          failureCallBack(model.error);
+          failureCallBack(model.result.returnText);
         }
       }
     }catch (exception){
@@ -82,6 +64,30 @@ class Network {
         failureCallBack(exception.toString());
       }
     }
+  }
+
+  _encryptData(Map<String, dynamic> params, String encryptKey) {
+    final plainText = json.encode(params);
+    final key = Key.fromUtf8(encryptKey);
+    final iv = IV.fromLength(0);
+
+    final encrypter = Encrypter(AES(key));
+
+    final encrypted = encrypter.encrypt(plainText, iv: iv);
+
+    return encrypted.base64;
+  }
+
+  _dencrypt() {
+    final plainText = json.encode(params);
+    final key = Key.fromUtf8(encryptKey);
+    final iv = IV.fromLength(0);
+
+    final encrypter = Encrypter(AES(key));
+
+    final decrypted = encrypter.decrypt(encrypted, iv: iv);
+
+    return decrypted;
   }
 
 }

@@ -1,9 +1,18 @@
-class BaseModel {
-  int code;
-  dynamic data;
-  String error;
+class Result {
+  bool isSuccess;
+  String secondaryFlag;
+  String returnText;
+  String returnFlag;
 
-  BaseModel({this.code, this.data, this.error});
+  Result({this.isSuccess, this.secondaryFlag, this.returnFlag, this.returnText});
+
+}
+
+class BaseModel {
+  Result result;
+  dynamic data;
+
+  BaseModel({this.result, this.data});
 
   BaseModel.fromJson(Map<String, dynamic> json) {
 
