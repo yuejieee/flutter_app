@@ -46,11 +46,11 @@ class HomePageWidgetState extends State<HomePageWidget>
     boatController = new AnimationController(
         duration: const Duration(seconds: 30), vsync: this);
     boatMovement =
-    new Tween(begin: Alignment(-1.3, -0.2), end: Alignment(1.3, -0.2))
-        .animate(boatController)
-      ..addListener(() {
-        setState(() => {});
-      });
+        new Tween(begin: Alignment(-1.3, -0.2), end: Alignment(1.3, -0.2))
+            .animate(boatController)
+              ..addListener(() {
+                setState(() => {});
+              });
     //启动动画(正向执行)
     boatController.repeat();
   }
@@ -126,6 +126,11 @@ class HomePageWidgetState extends State<HomePageWidget>
 
   _sendBottleEvent() {
     print('扔瓶子');
-    Network.instance.post('', '', staticKey, {'name': 'yuejie'});
+    Network.instance.post("", "PhoneExist", {"PhoneNumber": "17681860411"},
+        (data) {
+      print(data);
+    }, (error) {
+      print(error);
+    });
   }
 }

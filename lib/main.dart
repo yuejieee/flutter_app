@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/base/tab_bar_page.dart';
+import 'package:flutter_app/base/network/network.dart';
+import 'package:flutter_app/base/network/network_config.dart';
 
 void main() {
   runApp(MyApp());
@@ -7,6 +9,12 @@ void main() {
 
 // 无状态widget
 class MyApp extends StatelessWidget {
+  @override
+  StatelessElement createElement() {
+    _setupNetwork();
+    return super.createElement();
+  }
+
   @override
   // 重写默认构造方法
   Widget build(BuildContext context) {
@@ -28,5 +36,14 @@ class MyApp extends StatelessWidget {
       title: 'flutter_app',
       home: TabBarWidget(),
     );
+  }
+
+  _setupNetwork() {
+    NetworkConfig config = NetworkConfig(
+        domain: "https://web81.kaboy.net",
+        staticKey: "ABCDEFGHIJK12345",
+        appVersion: "5.22.0",
+        appType: "3");
+    Network.instance.config = config;
   }
 }
