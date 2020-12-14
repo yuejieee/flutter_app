@@ -34,9 +34,10 @@ class Network {
   post(String domain, String port, Map<String, dynamic> params,
       Function success, Function failure) {
     String checkCode = _getCheckCode('');
-    String realDomain = domain.length > 0 ? domain : config.domain;
+    String realDomain = domain.length > 0 ? domain : config?.domain;
     String completeUrl =
-        "${realDomain}/KCPort/PortCall?Unid=${'123'}&Port=${port}&CheckCode=${checkCode}";
+        "$realDomain/KCPort/PortCall?Unid=${'123'}&Port=$port&CheckCode=$checkCode";
+    print("url is $completeUrl");
     _doRequest(completeUrl, port, params, success, failure);
   }
 
