@@ -5,6 +5,11 @@ import 'network_config.dart';
 import 'package:encrypt/encrypt.dart';
 import 'package:xml2json/xml2json.dart';
 
+enum DataType {
+  xml,
+  json,
+}
+
 class Network {
   // 工厂模式
   factory Network() => _getInstance();
@@ -31,54 +36,65 @@ class Network {
     return _instance;
   }
 
-  post(String domain, String port, Map<String, dynamic> params,
+  post(String domain, String port, Map<String, dynamic> params, DataType type,
       Function success, Function failure) {
     String checkCode = _getCheckCode('');
     String realDomain = domain.length > 0 ? domain : config?.domain;
     String completeUrl =
         "$realDomain/KCPort/PortCall?Unid=${'123'}&Port=$port&CheckCode=$checkCode";
     print("url is $completeUrl");
-    _doRequest(completeUrl, port, params, success, failure);
+    _doRequest(completeUrl, port, params, type, success, failure);
   }
 
-  void _doRequest(
-      String url,
-      String port,
-      Map<String, dynamic> params,
-      Function successCallBack,
-      Function failureCallBack) async {
+  void _doRequest(String url, String port, Map<String, dynamic> params,
+      DataType type,
+      Function successCallBack, Function failureCallBack) async {
+    String key = config.dynamicKey != null ? config.dynamicKey : config
+        .staticKey;
     try {
       Response response;
       if (params != null && params.isNotEmpty) {
-        String key =
-            config.dynamicKey.length > 0 ? config.dynamicKey : config.staticKey;
-        dynamic data = _encryptData(params, key);
-        response = await dio.post(url, data: data);
+        if (config != null) {
+          String dataText;
+          if (type == DataType.xml) {
+            dataText = _handleXMLOnPackData(params, port);
+          } else {
+            dataText = json.encode(params);
+          }
+          dynamic data = _encryptData(dataText, key);
+          response = await dio.post(url, data: data);
+        }
       } else {
         response = await dio.post(url);
       }
-      Map<String, dynamic> result = json.decode(response.toString());
       // 打印信息
-      print('''api: $url\nparams: $params\nresult: $result''');
-      // 转化为model
-      BaseModel model = BaseModel.fromJson(result);
-      if (model.result.isSuccess) {
-        // 200 请求成功
-        if (successCallBack != null) {
-          // 返回请求数据
-          successCallBack(model.data);
-        }
+      String data = _decrypt(response.toString(), key);
+      Map<String, dynamic> result;
+      if (type == DataType.xml) {
+        String jsonStr = _handleXMLToPackData(data);
+        result = json.decode(jsonStr);
       } else {
-        //直接使用Toast弹出错误信息
-        //返回失败信息
-        if (failureCallBack != null) {
-          failureCallBack(model.result.returnText);
-        }
+        result = json.decode(response.toString());
       }
-    } catch (exception) {
-      print('错误：${exception.toString()}');
+      print(result);
+
+    } catch (error) {
+      // 请求超时
+      if (error.type == DioErrorType.CONNECT_TIMEOUT) {
+        print("请求超时");
+      }
+      // 一般服务器错误
+      else if (error.type == DioErrorType.RECEIVE_TIMEOUT) {
+        print("服务器错误");
+      }
+
+      print('请求异常: ' + error.toString());
+      print('请求异常url: ' + url);
+      print('请求头: ' + dio.options.headers.toString());
+      print('method: ' + dio.options.method);
+
       if (failureCallBack != null) {
-        failureCallBack(exception.toString());
+        failureCallBack(error.toString());
       }
     }
   }
@@ -87,27 +103,49 @@ class Network {
     return "$memberId;${config.appVersion};iOS;${config.appType};0";
   }
 
-  _encryptData(Map<String, dynamic> params, String encryptKey) {
-    final plainText = json.encode(params);
-    final key = Key.fromUtf8(encryptKey);
-    final iv = IV.fromLength(0);
-
-    final encrypter = Encrypter(AES(key));
-
-    final encrypted = encrypter.encrypt(plainText, iv: iv);
-
-    return encrypted.base64;
+  // XML上行处理
+  _handleXMLOnPackData(Map<String, dynamic> params, String port) {
+    return "123123";
   }
 
-  _dencrypt() {
-    // final plainText = json.encode(params);
-    // final key = Key.fromUtf8(encryptKey);
-    // final iv = IV.fromLength(0);
-    //
-    // final encrypter = Encrypter(AES(key));
-    //
-    // final decrypted = encrypter.decrypt(encrypted, iv: iv);
-    //
-    // return decrypted;
+  // XML下行处理
+  _handleXMLToPackData(String data) {
+    try {
+      Xml2Json xml2json = Xml2Json();
+      xml2json.parse(data);
+      return xml2json.toParker();
+    } catch (error) {
+      return data;
+    }
+  }
+
+  // 加密
+  _encryptData(String paramStr, String encryptKey) {
+    try {
+      final key = Key.fromUtf8(encryptKey);
+      final iv = IV.fromLength(0);
+
+      final encrypter = Encrypter(AES(key, mode: AESMode.ecb));
+      final encrypted = encrypter.encrypt(paramStr, iv: iv);
+      return encrypted.base64;
+    } catch (error) {
+      print("加密失败" + error.toString());
+      return null;
+    }
+  }
+
+  // 解密
+  _decrypt(String data, String encryptKey) {
+    try {
+      final key = Key.fromUtf8(encryptKey);
+      final iv = IV.fromLength(0);
+
+      final encrypter = Encrypter(AES(key, mode: AESMode.ecb));
+      final decrypted = encrypter.decrypt64(data, iv: iv);
+      return decrypted;
+    } catch (error) {
+      print("解密失败" + error.toString());
+      return data;
+    }
   }
 }
