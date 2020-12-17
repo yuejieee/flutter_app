@@ -127,7 +127,7 @@ class HomePageWidgetState extends State<HomePageWidget>
   _sendBottleEvent() {
     print('扔瓶子');
     Network.instance.post(
-        "", "PhoneExist", {"PhoneNumber": "17681860411"}, DataType.xml, (data) {
+        "", "PhoneExist", {"PhoneNumber": "(+86)17681860411"}, DataType.xml, (data) {
       print(data);
     }, (error) {
       print(error);

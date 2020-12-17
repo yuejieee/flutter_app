@@ -38,7 +38,7 @@ class Network {
 
   post(String domain, String port, Map<String, dynamic> params, DataType type,
       Function success, Function failure) {
-    String checkCode = _getCheckCode('');
+    String checkCode = _getCheckCode('0000');
     String realDomain = domain.length > 0 ? domain : config?.domain;
     String completeUrl =
         "$realDomain/KCPort/PortCall?Unid=${'123'}&Port=$port&CheckCode=$checkCode";
@@ -61,7 +61,9 @@ class Network {
           } else {
             dataText = json.encode(params);
           }
+          print("dataText is $dataText");
           dynamic data = _encryptData(dataText, key);
+          print("data is $data");
           response = await dio.post(url, data: data);
         }
       } else {
@@ -105,7 +107,13 @@ class Network {
 
   // XML上行处理
   _handleXMLOnPackData(Map<String, dynamic> params, String port) {
-    return "123123";
+    String rootElement = port + "OnPack";
+    var xml = "<?xml version=\"1.0\" encoding=\"utf-8\" ?><$rootElement>";
+    params.forEach((key, value) {
+      xml = xml + "<$key>$value</$key>";
+    });
+    xml = xml + "</$rootElement>";
+    return xml;
   }
 
   // XML下行处理
