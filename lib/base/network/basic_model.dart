@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'base_model.dart';
 import 'network_config.dart';
 import 'package:encrypt/encrypt.dart';
 import 'package:xml2json/xml2json.dart';
@@ -10,47 +9,48 @@ enum DataType {
   json,
 }
 
-class Network {
-  // 工厂模式
-  factory Network() => _getInstance();
-
-  static Network get instance => _getInstance();
-  static Network _instance;
-
+class BasicModel {
   NetworkConfig config;
   Dio dio;
 
-  Network._internal() {
-    // 初始化
+  bool isSuccess = false;
+  String returnText = "";
+  String returnFlag = "";
+
+  BasicModel() {
     dio = Dio(BaseOptions(
       connectTimeout: 60000, // 连接服务器超时时间，单位是毫秒.
       receiveTimeout: 10000, // 响应流上前后两次接受到数据的间隔，单位为毫秒, 这并不是接收数据的总时限.
     ));
+    this.config = getConfig();
   }
 
-  // 单列模式
-  static Network _getInstance() {
-    if (_instance == null) {
-      _instance = Network._internal();
-    }
-    return _instance;
+  // 配置(子类重写)
+  NetworkConfig getConfig() {
+    return NetworkConfig();
   }
 
-  post(String domain, String port, Map<String, dynamic> params, DataType type,
-      Function success, Function failure) {
-    String checkCode = _getCheckCode('0000');
+  // 请求
+  post(String port, Map<String, dynamic> params, DataType type,
+      Function success, Function failure,
+      {String domain = ""}) {
+    String checkCode = _getCheckCode(config.memberId);
     String realDomain = domain.length > 0 ? domain : config?.domain;
     String completeUrl =
         "$realDomain/KCPort/PortCall?Unid=${'123'}&Port=$port&CheckCode=$checkCode";
-    print("url is $completeUrl");
+    if (type == DataType.json) {
+      completeUrl += "dataType=1";
+    }
+    if (_isDebug()) {
+      print("url is $completeUrl");
+    }
     _doRequest(completeUrl, port, params, type, success, failure);
   }
 
   void _doRequest(String url, String port, Map<String, dynamic> params,
-      DataType type,
-      Function successCallBack, Function failureCallBack) async {
-    String key = config.dynamicKey != null ? config.dynamicKey : config
-        .staticKey;
+      DataType type, Function successCallBack, Function failureCallBack) async {
+    String key =
+        config.dynamicKey != null ? config.dynamicKey : config.staticKey;
     try {
       Response response;
       if (params != null && params.isNotEmpty) {
@@ -61,9 +61,10 @@ class Network {
           } else {
             dataText = json.encode(params);
           }
-          print("dataText is $dataText");
+          if (_isDebug()) {
+            print("onPack is $dataText");
+          }
           dynamic data = _encryptData(dataText, key);
-          print("data is $data");
           response = await dio.post(url, data: data);
         }
       } else {
@@ -78,23 +79,20 @@ class Network {
       } else {
         result = json.decode(response.toString());
       }
-      print(result);
-
+      Map<String, dynamic> responseData = result['${port}ToPack'];
+      if (_isDebug()) {
+        print("toPack is $responseData");
+      }
+      if (successCallBack != null) {
+        successCallBack(responseData);
+      }
     } catch (error) {
-      // 请求超时
-      if (error.type == DioErrorType.CONNECT_TIMEOUT) {
-        print("请求超时");
-      }
-      // 一般服务器错误
-      else if (error.type == DioErrorType.RECEIVE_TIMEOUT) {
-        print("服务器错误");
-      }
+      if (error == DioErrorType.CONNECT_TIMEOUT) {
 
-      print('请求异常: ' + error.toString());
-      print('请求异常url: ' + url);
-      print('请求头: ' + dio.options.headers.toString());
-      print('method: ' + dio.options.method);
-
+      }
+      if (_isDebug()) {
+        print("请求错误：${error.toString()}");
+      }
       if (failureCallBack != null) {
         failureCallBack(error.toString());
       }
@@ -155,5 +153,11 @@ class Network {
       print("解密失败" + error.toString());
       return data;
     }
+  }
+
+  bool _isDebug() {
+    bool inDebug = false;
+    assert(inDebug = true);
+    return inDebug;
   }
 }
