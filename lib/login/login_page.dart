@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/base/network/network.dart';
 
 class LoginPageWidget extends StatefulWidget {
   @override
@@ -25,11 +24,7 @@ class LoginPageWidgetState extends State<LoginPageWidget> {
   }
 
   _getContentView() {
-    Network.instance.post('', {'':''}, success: () {
 
-    }, failure: () {
-
-    });
   }
 
 }

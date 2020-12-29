@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/base/network/network.dart';
 
 class HomePageWidget extends StatefulWidget {
   @override
@@ -126,11 +125,5 @@ class HomePageWidgetState extends State<HomePageWidget>
 
   _sendBottleEvent() {
     print('扔瓶子');
-    Network.instance.post(
-        "", "PhoneExist", {"PhoneNumber": "(+86)17681860411"}, DataType.xml, (data) {
-      print(data);
-    }, (error) {
-      print(error);
-    });
   }
 }
