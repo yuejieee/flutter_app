@@ -39,7 +39,7 @@ class BasicModel {
     String completeUrl =
         "$realDomain/KCPort/PortCall?Unid=${'123'}&Port=$port&CheckCode=$checkCode";
     if (type == DataType.json) {
-      completeUrl += "dataType=1";
+      completeUrl += "&dataType=1";
     }
     if (_isDebug()) {
       print("url is $completeUrl");

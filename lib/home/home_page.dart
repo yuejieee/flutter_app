@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/home/TestModel.dart';
 
 class HomePageWidget extends StatefulWidget {
   @override
@@ -125,5 +126,7 @@ class HomePageWidgetState extends State<HomePageWidget>
 
   _sendBottleEvent() {
     print('扔瓶子');
+    TestModel model = TestModel();
+    model.requestData(() {}, () {});
   }
 }
